@@ -1,0 +1,9 @@
+*.py[co]
+*.sw[po]
+*.egg*
+*.swp
+*~
+.tox
+.cache
+.pytest_cache
+.env
