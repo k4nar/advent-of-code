@@ -1,24 +1,17 @@
 from functools import reduce
-from itertools import cycle, islice
 from operator import mul
 
 with open("input") as f:
-    lines = [line.strip() for line in f.readlines()]
-
-
-def nth(iterable, n):
-    return next(islice(iterable, n, None))
+    forest = [line.strip() for line in f.readlines()]
 
 
 def get_number_of_trees(right, down):
-    forest = [cycle(row) for row in lines]
-
     trees = 0
     x, y = right, down
 
     while y < len(forest):
         row = forest[y]
-        trees += nth(row, x) == "#"
+        trees += row[x % len(row)] == "#"
         x += right
         y += down
 
