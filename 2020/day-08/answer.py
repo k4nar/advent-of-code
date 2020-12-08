@@ -1,6 +1,3 @@
-acc = 0
-
-
 class InfiniteLoop(RuntimeError):
     pass
 
