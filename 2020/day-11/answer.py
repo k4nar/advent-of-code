@@ -1,4 +1,4 @@
-from itertools import product
+from itertools import accumulate
 
 with open("input") as f:
     room = [line.strip() for line in f]
@@ -28,14 +28,23 @@ def get_next_room_part1(room):
         if seat == ".":
             return seat
 
-        occupied = sum(
-            room[i][j] == "#" if i >= 0 and i < Y and j >= 0 and j < X else 0
-            for i, j in product([y - 1, y, y + 1], [x - 1, x, x + 1])
-        ) - (seat == "#")
+        occupied = (
+            room[j][i] == "#" if 0 <= i < X and 0 <= j < Y else 0
+            for i, j in (
+                (x, y - 1),
+                (x, y + 1),
+                (x - 1, y),
+                (x + 1, y),
+                (x - 1, y + 1),
+                (x - 1, y - 1),
+                (x + 1, y - 1),
+                (x + 1, y + 1),
+            )
+        )
 
-        if seat == "L" and occupied == 0:
+        if seat == "L" and not any(occupied):
             return "#"
-        elif seat == "#" and occupied >= 4:
+        elif seat == "#" and any(acc >= 4 for acc in accumulate(occupied)):
             return "L"
         else:
             return seat
@@ -57,7 +66,7 @@ def get_next_room_part2(room):
         if seat == ".":
             return seat
 
-        occupied = sum(
+        occupied = (
             next((s for s in seats if s != "."), ".") == "#"
             for seats in (
                 (room[i - 1][x] for i in range(y, 0, -1)),
@@ -71,9 +80,9 @@ def get_next_room_part2(room):
             )
         )
 
-        if seat == "L" and occupied == 0:
+        if seat == "L" and not any(occupied):
             return "#"
-        elif seat == "#" and occupied >= 5:
+        elif seat == "#" and any(acc >= 5 for acc in accumulate(occupied)):
             return "L"
 
         return seat
